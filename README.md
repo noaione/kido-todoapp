@@ -2,7 +2,8 @@
 
 This is a sample project using Firebase as database for a simple todo application.
 
-This project use the following stack:
+**This project use the following stack**:
+- Asynchronous Python
 - FastAPI (Framework)
 - firebase-admin (Firebase connection)
 - Jinja2 (Template rendering)
