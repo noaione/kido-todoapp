@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List
 
 from fastapi import FastAPI, HTTPException, Request, Response
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, ORJSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -30,7 +30,7 @@ async def todos_get():
         if todo is None:
             continue
         todo_list.append(Todo.from_dict(todo))
-    return todo_list
+    return ORJSONResponse(todo_list)
 
 
 @app.post("/todos", response_model=Todo)
@@ -40,7 +40,7 @@ async def todos_post(todo: PartialTodo):
     request_at = int(round(datetime.utcnow().timestamp()))
     actual_todo = todo.to_todo(request_at=request_at)
     await db.set_document("todos", actual_todo.id, actual_todo.to_dict())
-    return actual_todo.to_dict()
+    return ORJSONResponse(actual_todo.to_dict())
 
 
 @app.patch("/todos/{todo_id}", response_model=Todo)
@@ -63,7 +63,7 @@ async def todos_patch(todo_id: str, todo: PartialTodo):
 
     todo_actual.updated_at = int(round(datetime.utcnow().timestamp()))
     await db.set_document("todos", todo_id, todo_actual.to_dict())
-    return todo_actual.to_dict()
+    return ORJSONResponse(todo_actual.to_dict())
 
 
 @app.delete("/todos/{todo_id}")
