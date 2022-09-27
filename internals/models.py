@@ -1,9 +1,12 @@
-from typing import Literal, Optional
 from dataclasses import dataclass
+from typing import Generic, Literal, Optional, TypeVar
 from uuid import uuid4
 
+from pydantic.generics import GenericModel
+from fastapi.responses import ORJSONResponse
 
 TodoStatus = Literal["ONGOING", "DONE", "CANCELED"]
+DataType = TypeVar("DataType")
 
 
 @dataclass
@@ -60,3 +63,12 @@ class PartialTodo:
             created_at=request_at,
             updated_at=request_at,
         )
+
+
+class ResponseType(GenericModel, Generic[DataType]):
+    error: str = "Success"
+    code: int = 200
+    data: Optional[DataType] = None
+
+    def to_orjson(self, status: int = 200):
+        return ORJSONResponse(self.dict(), status_code=status)
