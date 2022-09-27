@@ -33,6 +33,14 @@ async def todos_get():
     return ResponseType[List[Todo]](data=todo_list).to_orjson()
 
 
+@app.get("/todos/{todo_id}", response_model=ResponseType[Todo])
+async def todo_get(todo_id: str):
+    todo_ref = await db.get_document("todos", todo_id)
+    if todo_ref is None:
+        return ResponseType(error="Specified todo is not found!", code=404).to_orjson(404)
+    return ResponseType[Todo](data=Todo.from_dict(todo_ref).to_dict()).to_orjson()
+
+
 @app.post("/todos", response_model=ResponseType[Todo])
 async def todos_post(todo: PartialTodo):
     if todo.text is None:
