@@ -2,11 +2,15 @@ from dataclasses import dataclass
 from typing import Generic, Literal, Optional, TypeVar
 from uuid import uuid4
 
-from pydantic.generics import GenericModel
 from fastapi.responses import ORJSONResponse
+from pydantic.generics import GenericModel
 
 TodoStatus = Literal["ONGOING", "DONE", "CANCELED"]
 DataType = TypeVar("DataType")
+
+
+def compare_text(a: str, b: str) -> bool:
+    return a.strip().casefold() == b.strip().casefold()
 
 
 @dataclass

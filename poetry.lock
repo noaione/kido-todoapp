@@ -658,6 +658,17 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "sse-starlette"
+version = "1.1.6"
+description = "\"SSE plugin for Starlette\""
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+starlette = "*"
+
+[[package]]
 name = "starlette"
 version = "0.20.4"
 description = "The little ASGI library that shines."
@@ -774,7 +785,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "0836799c376f675860a838a5460b44b3d8789449b8a6849c192ecfc46c5be58f"
+content-hash = "54b5c89617f193137207ac12c49de48e77e0384280fa9c8ac3ba445085710a28"
 
 [metadata.files]
 anyio = []
@@ -924,6 +935,7 @@ six = [
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
 sniffio = []
+sse-starlette = []
 starlette = []
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
