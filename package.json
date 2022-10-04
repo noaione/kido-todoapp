@@ -5,5 +5,9 @@
   "repository": "https://github.com/noaione/kido-todoapp.git",
   "author": "noaione <noaione0809@gmail.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "watch": "cd frontend && npm run watch"
+  }
 }

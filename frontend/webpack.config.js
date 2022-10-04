@@ -17,7 +17,7 @@ module.exports = {
             keep: /\.keep$/,
         }
     },
-    devtool: 'source-map',
+    devtool: "source-map",
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx"],
     },
@@ -28,7 +28,7 @@ module.exports = {
                 exclude: /(node_modules|bower_components)/,
                 use: {
                     // `.swcrc` can be used to configure swc
-                    loader: 'swc-loader',
+                    loader: "swc-loader",
                 },
             },
             {
@@ -64,4 +64,4 @@ module.exports = {
         port: 4541,
         liveReload: true
     }
-}
+};
