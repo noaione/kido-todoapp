@@ -2,12 +2,7 @@ module.exports = {
     root: true,
     parser: "@typescript-eslint/parser",
     plugins: ["@typescript-eslint"],
-    extends: [
-        "eslint:recommended",
-        "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended",
-        "prettier",
-    ],
+    extends: ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended", "prettier"],
     env: {
         node: true,
         es6: true,
@@ -91,6 +86,15 @@ module.exports = {
         "react/react-in-jsx-scope": 0,
         "react/display-name": 0,
         "react/prop-types": 0,
+        "no-restricted-imports": "off",
+        "@typescript-eslint/no-restricted-imports": [
+            "warn",
+            {
+                name: "react-redux",
+                importNames: ["useSelector", "useDispatch"],
+                message: "Use typed hooks `useAppDispatch` and `useAppSelector` instead.",
+            },
+        ],
     },
     overrides: [
         {
