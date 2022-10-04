@@ -31,7 +31,7 @@ async def bundle_scripts():
     loop = asyncio.get_event_loop()
 
     proc = subprocess.Popen("npm run build", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    out, err = await loop.run_in_executor(None, proc.communicate)
+    _, err = await loop.run_in_executor(None, proc.communicate)
     if proc.returncode != 0:
         print("Error bundling scripts:")
         print(err.decode())
