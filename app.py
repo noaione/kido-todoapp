@@ -18,7 +18,8 @@ app = FastAPI()
 db = FirebaseDatabase("kidotodo")
 ssemanager = SSEManager()
 
-app.mount("/static", StaticFiles(directory=ROOT_DIR / "public"), name="static")
+PUBLIC_FOLDER = ROOT_DIR / "public"
+app.mount("/static", StaticFiles(directory=PUBLIC_FOLDER / "static"), name="static")
 templates = Jinja2Templates(directory=ROOT_DIR / "views")
 
 
@@ -37,7 +38,19 @@ async def fastapi_shutdown():
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    scripts_folder = PUBLIC_FOLDER / "static" / "js"
+    styles_folder = PUBLIC_FOLDER / "static" / "css"
+    scripts: List[str] = []
+    styles: List[str] = []
+    if scripts_folder.exists():
+        # Yoink all scripts paths
+        scripts = ["/" + str(script.relative_to(PUBLIC_FOLDER)) for script in scripts_folder.glob("*.js")]
+    if styles_folder.exists():
+        # Yoink all styles paths
+        styles = ["/" + str(style.relative_to(PUBLIC_FOLDER)) for style in styles_folder.glob("*.js")]
+    return templates.TemplateResponse(
+        "index.html", {"request": request, "scripts": scripts, "stylesApp": styles}
+    )
 
 
 @app.get("/todos", response_model=ResponseType[List[Todo]])

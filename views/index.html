@@ -2,8 +2,15 @@
 <html>
     <head>
         <title>Kido Todo Application</title>
+        <meta name="description" content="Kido Todo App" />
+        {%- for styleApp in stylesApp %}
+        <link href="{{styleApp}}" rel="stylesheet" />
+        {%- endfor %}
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <main id="root" />
+        {%- for script in scripts %}
+        <script src="{{ script }}"></script>
+        {% endfor %}
     </body>
 </html>
