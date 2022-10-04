@@ -5,8 +5,12 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "build": "swc src -d ../public/static/js --source-maps",
+        "build": "npm run build:pack && npm run build:css",
         "build:pack": "cross-env NODE_ENV=production webpack",
+        "build:css": "cross-env NODE_ENV=production postcss ./src/styles/*.css -o ../public/static/css/main.css",
+        "watch:pack": "cross-env NODE_ENV=development webpack --watch",
+        "watch:css": "cross-env NODE_ENV=development postcss ./src/styles/*.css -o ../public/static/css/main.css --watch",
+        "watch": "concurrently \"pnpm run watch:pack\" \"pnpm run watch:css\"",
         "start": "webpack-dev-server"
     },
     "dependencies": {
@@ -23,6 +27,7 @@
         "@typescript-eslint/eslint-plugin": "^5.39.0",
         "@typescript-eslint/parser": "^5.39.0",
         "autoprefixer": "^10.4.12",
+        "concurrently": "^7.4.0",
         "cross-env": "^7.0.3",
         "css-loader": "0.7.1",
         "cssnano": "^5.1.13",
@@ -32,6 +37,7 @@
         "eslint-plugin-react": "^7.31.8",
         "mini-css-extract-plugin": "^2.6.1",
         "postcss": "8.4.17",
+        "postcss-cli": "^10.0.0",
         "postcss-flexbugs-fixes": "^5.0.2",
         "postcss-loader": "7.0.1",
         "postcss-preset-env": "^7.8.2",
