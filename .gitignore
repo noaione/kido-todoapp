@@ -6,3 +6,8 @@ venv/
 _dumps/
 __pycache__
 creds/*.json
+node_modules
+public/static/css/*.css
+public/static/js/*.js
+public/static/js/*.js.map
+public/static/js/*.js.LICENSE.txt

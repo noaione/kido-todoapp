@@ -1,0 +1,9 @@
+{
+  "name": "kidotodo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/noaione/kido-todoapp.git",
+  "author": "noaione <noaione0809@gmail.com>",
+  "license": "MIT",
+  "private": true
+}
