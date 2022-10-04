@@ -23,10 +23,27 @@ app.mount("/static", StaticFiles(directory=PUBLIC_FOLDER / "static"), name="stat
 templates = Jinja2Templates(directory=ROOT_DIR / "views")
 
 
+async def bundle_scripts():
+    """Bundle all scripts into one file."""
+    print("Bundling scripts...")
+    import subprocess
+
+    loop = asyncio.get_event_loop()
+
+    proc = subprocess.Popen("npm run build", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    out, err = await loop.run_in_executor(None, proc.communicate)
+    if proc.returncode != 0:
+        print("Error bundling scripts:")
+        print(err.decode())
+        raise RuntimeError("Error bundling scripts")
+    print("Done bundling scripts")
+
+
 @app.on_event("startup")
 async def fastapi_startup():
     task = asyncio.create_task(ssemanager.startup())
     app.extra["sse_task"] = task
+    await bundle_scripts()
 
 
 @app.on_event("shutdown")
@@ -44,10 +61,16 @@ async def root(request: Request):
     styles: List[str] = []
     if scripts_folder.exists():
         # Yoink all scripts paths
-        scripts = ["/" + str(script.relative_to(PUBLIC_FOLDER)) for script in scripts_folder.glob("*.js")]
+        scripts = [
+            "/" + str(script.relative_to(PUBLIC_FOLDER)).replace("\\", "/")
+            for script in scripts_folder.glob("*.js")
+        ]
     if styles_folder.exists():
         # Yoink all styles paths
-        styles = ["/" + str(style.relative_to(PUBLIC_FOLDER)) for style in styles_folder.glob("*.js")]
+        styles = [
+            "/" + str(style.relative_to(PUBLIC_FOLDER)).replace("\\", "/")
+            for style in styles_folder.glob("*.css")
+        ]
     return templates.TemplateResponse(
         "index.html", {"request": request, "scripts": scripts, "stylesApp": styles}
     )
