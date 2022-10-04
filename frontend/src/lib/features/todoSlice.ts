@@ -13,10 +13,12 @@ export interface Todo {
 
 interface TodoState {
     todos: Todo[];
+    lockedTodo: string[];
 }
 
 const initialState: TodoState = {
     todos: [],
+    lockedTodo: [],
 };
 
 export const todoSlice = createSlice({
@@ -44,12 +46,22 @@ export const todoSlice = createSlice({
         bulkAddTodo: (state, action: PayloadAction<Todo[]>) => {
             state.todos = action.payload;
         },
+        lockTodo: (state, action: PayloadAction<string>) => {
+            state.lockedTodo.push(action.payload);
+        },
+        removeLockTodo: (state, action: PayloadAction<string>) => {
+            const index = state.lockedTodo.findIndex((todo) => todo === action.payload);
+            if (index !== -1) {
+                state.lockedTodo.splice(index, 1);
+            }
+        },
     },
 });
 
-export const { addTodo, updateTodo, deleteTodo } = todoSlice.actions;
+export const { addTodo, updateTodo, deleteTodo, lockTodo, removeLockTodo } = todoSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectTodo = (state: RootState) => state.todos.todos;
+export const selectLockedTodo = (state: RootState) => state.todos.lockedTodo;
 
 export default todoSlice.reducer;

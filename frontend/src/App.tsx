@@ -3,7 +3,9 @@ import { connect, ConnectedProps } from "react-redux";
 import { Todo } from "./lib/features/todoSlice";
 import { ResponseGeneric } from "./lib/types";
 import TodoRender from "./components/TodoRender";
+import TodoSSEReceiver from "./lib/sse";
 import "./styles/app.css";
+import TodoAddSection from "./components/TodoAdd";
 
 const mapDispatch = {
     resetState: () => ({ type: "todo/expunge" }),
@@ -20,8 +22,20 @@ interface AppState {
 }
 
 class AppRoot extends React.Component<PropsFromRedux, AppState> {
+    sseReceiver: TodoSSEReceiver;
     constructor(props: PropsFromRedux) {
         super(props);
+
+        this.handleAddTodo = this.handleAddTodo.bind(this);
+        this.handleUpdateTodo = this.handleUpdateTodo.bind(this);
+        this.handleDeleteTodo = this.handleDeleteTodo.bind(this);
+
+        this.sseReceiver = new TodoSSEReceiver("/sse/todos");
+        this.sseReceiver.on("TodoCreated", (data) => {
+            this.handleAddTodo(data);
+        });
+        this.sseReceiver.on("TodoUpdated", this.handleUpdateTodo);
+        this.sseReceiver.on("TodoDeleted", this.handleDeleteTodo);
 
         this.state = {
             isLoading: true,
@@ -43,9 +57,23 @@ class AppRoot extends React.Component<PropsFromRedux, AppState> {
             return;
         }
 
-        console.info(data);
-
         this.props.addTodos(data);
+    }
+
+    handleAddTodo(payload: Todo) {
+        this.props.addTodo(payload);
+    }
+
+    handleUpdateTodo(payload: Todo) {
+        this.props.updateTodo(payload);
+    }
+
+    handleDeleteTodo(payload: Pick<Todo, "id">) {
+        this.props.deleteTodo(payload.id);
+    }
+
+    componentWillUnmount(): void {
+        this.sseReceiver.shutdown();
     }
 
     render(): React.ReactNode {
@@ -58,6 +86,7 @@ class AppRoot extends React.Component<PropsFromRedux, AppState> {
                     </h1>
                 </div>
                 <TodoRender />
+                <TodoAddSection />
             </>
         );
     }
