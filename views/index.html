@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Meta -->
         <title>Kido Todo Application</title>
         <meta name="description" content="Kido Todo App" />
+        <!-- Styles -->
         {%- for styleApp in stylesApp %}
         <link href="{{styleApp}}" rel="stylesheet" />
         {%- endfor %}
     </head>
-    <body>
-        <main id="root" />
+    <body class="bg-gray-900 text-white">
+        <div id="root" />
         {%- for script in scripts %}
         <script src="{{ script }}"></script>
         {% endfor %}
